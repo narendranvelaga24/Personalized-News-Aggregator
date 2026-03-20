@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String
+  createdAt    DateTime     @default(now())
+
+  preferences   UserPreference?
+  articleStates UserArticleState[]
+  feedbinAccount FeedbinAccount?
+}
+
+model UserPreference {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  preferredLanguages  String[] @default(["en"])
+  preferredCategories String[] @default([])
+  preferredSources    String[] @default([])
+  preferredKeywords   String[] @default([])
+  blockedKeywords     String[] @default([])
+  country             String   @default("us")
+  updatedAt           DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Source {
+  id               String    @id @default(cuid())
+  provider         String    // currents, gnews, newsdata, feedbin
+  providerSourceId String?
+  name             String
+  url              String?
+  country          String?
+  language         String?
+  category         String?
+  createdAt        DateTime  @default(now())
+
+  articles Article[]
+
+  @@unique([provider, providerSourceId])
+}
+
+model Article {
+  id           String    @id @default(cuid())
+  canonicalUrl String    @unique
+  title        String
+  description  String?
+  content      String?
+  imageUrl     String?
+  author       String?
+  publishedAt  DateTime?
+  sourceId     String?
+  provider     String
+  rawPayload   Json?
+  tags         String[]  @default([])
+  createdAt    DateTime  @default(now())
+
+  source        Source?            @relation(fields: [sourceId], references: [id])
+  articleStates UserArticleState[]
+}
+
+model UserArticleState {
+  userId    String
+  articleId String
+  isRead    Boolean  @default(false)
+  isSaved   Boolean  @default(false)
+  isHidden  Boolean  @default(false)
+  score     Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, articleId])
+}
+
+model FeedbinAccount {
+  id                       String    @id @default(cuid())
+  userId                   String    @unique
+  feedbinEmail             String
+  feedbinPasswordEncrypted String
+  lastSyncAt               DateTime?
+  lastEtag                 String?
+  createdAt                DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
