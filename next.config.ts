@@ -1,7 +1,22 @@
 import type { NextConfig } from "next";
 
+const backendUrl = process.env.BACKEND_URL || "http://localhost:3001";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${backendUrl}/:path*`,
+      },
+    ];
+  },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**" },
+      { protocol: "http", hostname: "**" },
+    ],
+  },
 };
 
 export default nextConfig;
