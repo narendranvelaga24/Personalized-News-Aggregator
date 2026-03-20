@@ -24,7 +24,7 @@ try {
 console.log(`[startup] Using database host: ${dbHost}`);
 
 console.log('[startup] Running prisma migrate deploy...');
-const migrate = spawnSync('npx', ['prisma', 'migrate', 'deploy', '--config', 'prisma.config.ts'], {
+const migrate = spawnSync('npx', ['prisma', 'migrate', 'deploy', '--config', 'prisma.config.js'], {
   stdio: 'inherit',
   env: process.env,
   timeout: 120000,

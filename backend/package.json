@@ -9,7 +9,7 @@
     "dev": "node --watch src/index.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:deploy": "prisma migrate deploy --config prisma.config.js",
     "db:studio": "prisma studio"
   },
   "keywords": [],
