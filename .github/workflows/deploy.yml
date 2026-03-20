@@ -26,14 +26,12 @@ jobs:
         run: npm i -g vercel@latest
 
       - name: Pull Vercel project settings
-        working-directory: frontend
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy frontend to Vercel
-        working-directory: frontend
         run: vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
