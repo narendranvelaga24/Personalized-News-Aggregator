@@ -48,6 +48,15 @@ function getToken(): string | null {
   return localStorage.getItem("token");
 }
 
+function getBackendUrl(): string {
+  if (typeof window === "undefined") {
+    // Server-side: use full URL
+    return process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
+  }
+  // Client-side: use full URL
+  return process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3001";
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {}
@@ -65,7 +74,8 @@ export async function apiFetch<T>(
 
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
-  const res = await fetch(`/api${path}`, { ...options, headers });
+  const backendUrl = getBackendUrl();
+  const res = await fetch(`${backendUrl}${path}`, { ...options, headers });
 
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
