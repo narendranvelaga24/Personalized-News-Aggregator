@@ -15,7 +15,7 @@ if (!resolvedDbUrl) {
 process.env.DATABASE_URL = resolvedDbUrl;
 
 console.log('[startup] Running prisma migrate deploy...');
-const migrate = spawnSync('npx', ['prisma', 'migrate', 'deploy'], {
+const migrate = spawnSync('npx', ['prisma', 'migrate', 'deploy', '--config', 'prisma.config.ts'], {
   stdio: 'inherit',
   env: process.env,
 });
