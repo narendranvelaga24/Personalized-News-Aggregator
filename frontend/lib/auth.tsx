@@ -5,6 +5,7 @@ import {
   useContext,
   useState,
   useCallback,
+  useEffect,
   ReactNode,
 } from "react";
 import { authApi } from "./api";
@@ -26,33 +27,31 @@ interface AuthContextValue extends AuthState {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>(() => {
-    if (typeof window === "undefined") {
-      return {
-        token: null,
-        userId: null,
-        email: null,
-        isAuthed: false,
-        isLoading: false,
-      };
-    }
-
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    const email = localStorage.getItem("email");
-
-    if (token && userId) {
-      return { token, userId, email, isAuthed: true, isLoading: false };
-    }
-
-    return {
-      token: null,
-      userId: null,
-      email: null,
-      isAuthed: false,
-      isLoading: false,
-    };
+  // Keep initial state deterministic across SSR and first client render.
+  const [state, setState] = useState<AuthState>({
+    token: null,
+    userId: null,
+    email: null,
+    isAuthed: false,
+    isLoading: true,
   });
+
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      const token = localStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const email = localStorage.getItem("email");
+
+      if (token && userId) {
+        setState({ token, userId, email, isAuthed: true, isLoading: false });
+        return;
+      }
+
+      setState({ token: null, userId: null, email: null, isAuthed: false, isLoading: false });
+    }, 0);
+
+    return () => window.clearTimeout(id);
+  }, []);
 
   const setAuth = useCallback(
     (token: string, userId: string, email: string) => {
