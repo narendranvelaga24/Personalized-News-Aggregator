@@ -14,13 +14,35 @@ if (!resolvedDbUrl) {
 
 process.env.DATABASE_URL = resolvedDbUrl;
 
+let dbHost = 'unknown';
+try {
+  dbHost = new URL(resolvedDbUrl).host;
+} catch {
+  // Keep unknown if URL parsing fails.
+}
+
+console.log(`[startup] Using database host: ${dbHost}`);
+
 console.log('[startup] Running prisma migrate deploy...');
 const migrate = spawnSync('npx', ['prisma', 'migrate', 'deploy', '--config', 'prisma.config.ts'], {
   stdio: 'inherit',
   env: process.env,
+  timeout: 120000,
 });
 
+if (migrate.error) {
+  if (migrate.error.code === 'ETIMEDOUT') {
+    console.error('[startup] Migration timed out after 120s. Check DB connectivity / SSL settings.');
+  } else {
+    console.error(`[startup] Migration process error: ${migrate.error.message}`);
+  }
+  process.exit(1);
+}
+
 if (migrate.status !== 0) {
+  if (migrate.signal) {
+    console.error(`[startup] Migration terminated by signal ${migrate.signal}`);
+  }
   console.error(`[startup] Migration failed with exit code ${migrate.status}`);
   process.exit(migrate.status || 1);
 }
