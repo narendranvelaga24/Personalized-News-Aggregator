@@ -4,7 +4,6 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
   useCallback,
   ReactNode,
 } from "react";
@@ -27,25 +26,33 @@ interface AuthContextValue extends AuthState {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<AuthState>({
-    token: null,
-    userId: null,
-    email: null,
-    isAuthed: false,
-    isLoading: true,
-  });
+  const [state, setState] = useState<AuthState>(() => {
+    if (typeof window === "undefined") {
+      return {
+        token: null,
+        userId: null,
+        email: null,
+        isAuthed: false,
+        isLoading: false,
+      };
+    }
 
-  // Rehydrate from localStorage on mount
-  useEffect(() => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     const email = localStorage.getItem("email");
+
     if (token && userId) {
-      setState({ token, userId, email, isAuthed: true, isLoading: false });
-    } else {
-      setState((s) => ({ ...s, isLoading: false }));
+      return { token, userId, email, isAuthed: true, isLoading: false };
     }
-  }, []);
+
+    return {
+      token: null,
+      userId: null,
+      email: null,
+      isAuthed: false,
+      isLoading: false,
+    };
+  });
 
   const setAuth = useCallback(
     (token: string, userId: string, email: string) => {
