@@ -11,6 +11,15 @@ npm run db:migrate
 npm run dev
 ```
 
+## Render Deployment (Production)
+
+Use these commands in Render Web Service settings:
+
+- Build Command: `npm install && npm run db:generate && npm run db:migrate:deploy`
+- Start Command: `npm start`
+
+This avoids command typos and ensures production-safe migrations (`deploy`, not `dev`).
+
 Default local API base URL: `http://localhost:3001`
 
 ## Environment Variables
