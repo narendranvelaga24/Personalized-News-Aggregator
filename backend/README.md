@@ -18,7 +18,7 @@ Use these commands in Render Web Service settings:
 - Build Command: `npm install && npm run db:generate`
 - Start Command: `npm run start:with-migrate`
 
-This avoids command typos and ensures production-safe migrations (`deploy`, not `dev`).
+This keeps migration on free tier startup and retries transient advisory-lock timeouts automatically.
 
 If Render build logs show Prisma `datasource.url` missing, verify one of these env vars is set on the service:
 
@@ -43,6 +43,11 @@ Required keys:
 - `NEWSDATA_API_KEY`
 - `PORT` (default `3001`)
 - `NODE_ENV`
+
+Optional migration-tuning keys (useful on Neon/Render free tier lock contention):
+
+- `MIGRATE_MAX_ATTEMPTS` (default `4`)
+- `MIGRATE_RETRY_DELAY_MS` (default `6000`)
 
 ## API
 

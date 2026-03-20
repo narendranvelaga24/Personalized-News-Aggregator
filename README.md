@@ -100,8 +100,11 @@ Suggested hosting:
 ## Troubleshooting
 
 - If frontend API calls fail with connection errors, ensure backend runs on port `3001` and frontend `.env.local` has:
-  - `BACKEND_URL=http://localhost:3001`
+  - `NEXT_PUBLIC_BACKEND_URL=http://localhost:3001`
 - If backend startup fails with `EADDRINUSE` on port `3001`, stop the process using that port or set a different `PORT` in `backend/.env`.
 - If frontend reports port `3000` in use, Next.js will automatically choose the next available port (for example `3001`).
 - If a provider image fails to load, card falls back to placeholder automatically.
 - If ingestion hits rate limits (e.g. Currents 429), wait for quota reset or reduce polling frequency.
+- If Render startup fails with Prisma advisory lock timeout (`P1002`), increase retry env vars on backend service:
+  - `MIGRATE_MAX_ATTEMPTS`
+  - `MIGRATE_RETRY_DELAY_MS`

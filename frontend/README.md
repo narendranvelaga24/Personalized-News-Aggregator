@@ -16,12 +16,18 @@ If port `3000` is occupied, Next.js will auto-select another port (shown in term
 
 ## Environment
 
-The frontend proxies API calls to backend via Next rewrites.
+The frontend API client calls the backend directly using a public runtime variable.
 
 Required variable in `.env.local`:
 
 ```bash
-BACKEND_URL=http://localhost:3001
+NEXT_PUBLIC_BACKEND_URL=http://localhost:3001
+```
+
+Production value example:
+
+```bash
+NEXT_PUBLIC_BACKEND_URL=https://personalized-news-aggregator-7rv1.onrender.com
 ```
 
 ## Main Routes
