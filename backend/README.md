@@ -15,10 +15,16 @@ npm run dev
 
 Use these commands in Render Web Service settings:
 
-- Build Command: `npm install && npm run db:generate && npm run db:migrate:deploy`
-- Start Command: `npm start`
+- Build Command: `npm install && npm run db:generate`
+- Start Command: `npm run start:with-migrate`
 
 This avoids command typos and ensures production-safe migrations (`deploy`, not `dev`).
+
+If Render build logs show Prisma `datasource.url` missing, verify one of these env vars is set on the service:
+
+- `DATABASE_URL` (preferred)
+- `POSTGRES_URL`
+- `POSTGRES_PRISMA_URL`
 
 Default local API base URL: `http://localhost:3001`
 

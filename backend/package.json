@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
+    "start:with-migrate": "prisma migrate deploy && node src/index.js",
     "dev": "node --watch src/index.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
