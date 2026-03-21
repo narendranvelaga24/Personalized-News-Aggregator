@@ -73,6 +73,12 @@ Frontend URL: `http://localhost:3000`
 - Frontend guide: `frontend/README.md`
 - API reference: `backend/API_DOCUMENTATION.md`
 
+## External News APIs
+
+- https://currentsapi.services/en - Latest news published in various news sources, blogs and forums
+- https://gnews.io/ - Search for news from various sources
+- https://newsdata.io/ - News data API for live-breaking news and headlines from reputed news sources
+
 ## CI/CD (GitHub Actions)
 
 Two workflows are included:

@@ -55,6 +55,12 @@ Detailed endpoint reference is available in:
 
 - `API_DOCUMENTATION.md`
 
+External news provider APIs used by workers:
+
+- https://currentsapi.services/en - Latest news published in various news sources, blogs and forums
+- https://gnews.io/ - Search for news from various sources
+- https://newsdata.io/ - News data API for live-breaking news and headlines from reputed news sources
+
 Recent additions:
 
 - `GET /feed/home` and `GET /feed/latest` accept optional `refresh=true` to trigger on-demand provider fetch before returning results.
