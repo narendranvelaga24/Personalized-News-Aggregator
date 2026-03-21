@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useAuth } from "@/lib/auth";
 import { Sparkles, Newspaper, ShieldCheck, Orbit, WandSparkles, ArrowUpRight } from "lucide-react";
 
 export default function Home() {
+  const { isAuthed, isLoading } = useAuth();
+
   return (
     <div className="relative overflow-hidden min-h-screen editorial-stage scene-3d">
       <div className="absolute inset-0 pointer-events-none">
@@ -39,17 +44,19 @@ export default function Home() {
 
           <div className="stagger stagger-2 mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
-              href="/register"
+              href={isAuthed ? "/for-you" : "/register"}
               className="btn-primary spell-cta rounded-full px-8 py-3 text-sm font-semibold uppercase tracking-[0.14em]"
             >
-              Enter NewsFlow
+              {isAuthed ? "Open My Feed" : "Enter NewsFlow"}
             </Link>
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center rounded-full border border-black/25 px-8 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-black transition-colors hover:bg-black hover:text-white"
-            >
-              Sign in
-            </Link>
+            {!isAuthed && !isLoading && (
+              <Link
+                href="/login"
+                className="inline-flex items-center justify-center rounded-full border border-black/25 px-8 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-black transition-colors hover:bg-black hover:text-white"
+              >
+                Sign in
+              </Link>
+            )}
             <Link
               href="/latest"
               className="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-medium text-black/65 transition-colors hover:text-black"
@@ -94,6 +101,18 @@ export default function Home() {
               Parallax hero with smooth micro-motion
             </span>
           </div>
+
+          <p className="mt-6 text-xs text-black/50">
+            done by{" "}
+            <a
+              href="https://github.com/narendranvelaga24"
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 hover:text-black"
+            >
+              https://github.com/narendranvelaga24
+            </a>
+          </p>
         </section>
       </main>
     </div>

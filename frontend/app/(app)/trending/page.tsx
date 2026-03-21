@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { feedApi, Article } from "@/lib/api";
 import ArticleCard from "@/components/ArticleCard";
 import SkeletonCard from "@/components/SkeletonCard";
-import { TrendingUp, AlertCircle, RefreshCw, Flame } from "lucide-react";
+import { TrendingUp, AlertCircle, RefreshCw } from "lucide-react";
 
 function mergeUniqueById(existing: Article[], incoming: Article[]): Article[] {
   const map = new Map<string, Article>();
@@ -62,15 +62,6 @@ export default function TrendingPage() {
           </button>
         </div>
 
-        <div className="mt-4 flex items-center gap-2 text-xs text-black/60">
-          <span className="inline-flex h-6 items-center gap-1.5 rounded-full bg-black text-white border border-black px-3">
-            <Flame className="w-3.5 h-3.5" />
-            Momentum index
-          </span>
-          <span className="inline-flex h-6 items-center rounded-full bg-white border border-black/15 px-3">
-            {articles.length} surfaced
-          </span>
-        </div>
       </div>
 
       {error && (

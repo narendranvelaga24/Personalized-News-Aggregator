@@ -53,9 +53,6 @@ function SearchContent() {
               <p className="text-sm text-black/60">Find articles by keyword, source, or topic</p>
             </div>
           </div>
-          <span className="inline-flex h-6 items-center rounded-full bg-white border border-black/15 px-3 text-xs text-black/60">
-            Discovery mode
-          </span>
         </div>
       </div>
 

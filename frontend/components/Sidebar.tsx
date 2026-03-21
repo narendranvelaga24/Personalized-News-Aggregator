@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import {
+  House,
   Home,
   Clock,
   TrendingUp,
@@ -16,6 +17,7 @@ import {
 import clsx from "clsx";
 
 const navItems = [
+  { href: "/", icon: House, label: "Home" },
   { href: "/for-you", icon: Home, label: "For You", authRequired: true },
   { href: "/latest", icon: Clock, label: "Latest" },
   { href: "/trending", icon: TrendingUp, label: "Trending" },
