@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bookmark, BookmarkCheck, EyeOff, Check } from "lucide-react";
 import { Article, articleApi } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
@@ -19,6 +19,22 @@ export default function ArticleActions({ article, initialSaved = false, onHide }
   const [hidden, setHidden] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
 
+  // Restore article state from localStorage on mount
+  useEffect(() => {
+    if (!isAuthed) return;
+    const readKey = `article-read-${article.id}`;
+    const savedKey = `article-saved-${article.id}`;
+    const hiddenKey = `article-hidden-${article.id}`;
+
+    const storedRead = localStorage.getItem(readKey) === "true";
+    const storedSaved = localStorage.getItem(savedKey) === "true";
+    const storedHidden = localStorage.getItem(hiddenKey) === "true";
+
+    if (storedRead) setRead(true);
+    if (storedSaved) setSaved(true);
+    if (storedHidden) setHidden(true);
+  }, [article.id, isAuthed]);
+
   if (!isAuthed) return null;
   if (hidden) return null;
 
@@ -29,16 +45,20 @@ export default function ArticleActions({ article, initialSaved = false, onHide }
         if (saved) {
           await articleApi.unsave(article.id);
           setSaved(false);
+          localStorage.removeItem(`article-saved-${article.id}`);
         } else {
           await articleApi.save(article.id);
           setSaved(true);
+          localStorage.setItem(`article-saved-${article.id}`, "true");
         }
       } else if (action === "read") {
         await articleApi.markRead(article.id);
         setRead(true);
+        localStorage.setItem(`article-read-${article.id}`, "true");
       } else if (action === "hide") {
         await articleApi.hide(article.id);
         setHidden(true);
+        localStorage.setItem(`article-hidden-${article.id}`, "true");
         onHide?.(article.id);
       }
     } catch {
